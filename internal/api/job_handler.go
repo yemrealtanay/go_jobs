@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"github.com/go-chi/chi/v5"
+	"go_jobs/internal/worker"
 	"net/http"
 	"strconv"
 
@@ -23,6 +24,10 @@ func HandleCreateJob(w http.ResponseWriter, r *http.Request) {
 	}
 
 	createdJob := job.AddJob(j)
+
+	go func(j job.Job) {
+		worker.JobQueue <- j
+	}(createdJob)
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(createdJob)

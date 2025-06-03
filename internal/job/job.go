@@ -23,7 +23,8 @@ func AddJob(j Job) Job {
 	idSeq++
 	j.JOB_ID = idSeq
 	jobQueue = append(jobQueue, j)
-	fmt.Printf("Added job %d\n", j.JOB_ID)
+
+	fmt.Printf("New Job Added - ID: %d\n", j.JOB_ID)
 	return j
 }
 
