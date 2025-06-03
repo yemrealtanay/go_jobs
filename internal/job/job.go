@@ -32,3 +32,15 @@ func GetAllJobs() []Job {
 	defer mu.Unlock()
 	return jobQueue
 }
+
+func GetJobById(id int64) (*Job, bool) {
+	mu.Lock()
+	defer mu.Unlock()
+
+	for _, j := range jobQueue {
+		if j.JOB_ID == id {
+			return &j, true
+		}
+	}
+	return nil, false
+}

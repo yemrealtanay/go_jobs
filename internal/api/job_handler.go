@@ -2,8 +2,11 @@ package api
 
 import (
 	"encoding/json"
-	"go_jobs/internal/job"
+	"github.com/go-chi/chi/v5"
 	"net/http"
+	"strconv"
+
+	"go_jobs/internal/job"
 )
 
 func HandleCreateJob(w http.ResponseWriter, r *http.Request) {
@@ -38,5 +41,26 @@ func HandleGetJobs(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
+}
 
+func HandleGetJobById(w http.ResponseWriter, r *http.Request) {
+	idStr := chi.URLParam(r, "id")
+
+	id, err := strconv.ParseInt(idStr, 10, 64)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	foundJob, ok := job.GetJobById(id)
+	if !ok {
+		http.Error(w, "Job not found", http.StatusNotFound)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(foundJob)
+	if err != nil {
+		return
+	}
 }
