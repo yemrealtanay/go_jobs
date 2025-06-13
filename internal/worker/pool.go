@@ -21,9 +21,8 @@ func worker(id int, jobs <-chan job.Job) {
 	for j := range jobs {
 		fmt.Printf("[Worker %d] Processing Job #%d - Type: %s\n", id, j.JOB_ID, j.Type)
 
-		// Simule et
 		time.Sleep(1 * time.Second)
 
-		fmt.Printf("[Worker %d] Processing Job #%d\n", id, j.JOB_ID)
+		fmt.Printf("[Worker %d] Finished Job #%d - Type: %s\n", id, j.JOB_ID, j.Type)
 	}
 }
